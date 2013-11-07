@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KinectBridgeWithOpenCVBasics-D2D", "KinectBridgeWithOpenCVBasics-D2D.vcxproj", "{B7D8D83E-4FAB-4D98-9039-EA6455F23969}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ubiquidine", "KinectBridgeWithOpenCVBasics-D2D.vcxproj", "{B7D8D83E-4FAB-4D98-9039-EA6455F23969}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
