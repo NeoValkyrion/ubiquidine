@@ -173,6 +173,7 @@
     <ClInclude Include="FrameRateTracker.h" />
     <ClInclude Include="KinectHelper.h" />
     <ClInclude Include="MainWindow.h" />
+    <ClInclude Include="MTPlateDetector.h" />
     <ClInclude Include="OpenCVFrameHelper.h" />
     <ClInclude Include="OpenCVHelper.h" />
     <ClInclude Include="resource.h" />
@@ -181,6 +182,7 @@
   <ItemGroup>
     <ClCompile Include="FrameRateTracker.cpp" />
     <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="MTPlateDetector.cpp" />
     <ClCompile Include="OpenCVFrameHelper.cpp" />
     <ClCompile Include="OpenCVHelper.cpp" />
   </ItemGroup>
