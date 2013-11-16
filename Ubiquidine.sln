@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ubiquidine", "ubiquidine.csproj", "{8FB2DEA6-9900-4FC5-87E4-B54188F62884}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C6F9C31B-6130-4443-A5CC-EF0664552ECD} = {C6F9C31B-6130-4443-A5CC-EF0664552ECD}
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Kinect.Toolkit.FaceTracking", "Microsoft.Kinect.Toolkit.FaceTracking\Microsoft.Kinect.Toolkit.FaceTracking.csproj", "{1BCF9CEE-DF01-430E-B49D-41A9A88963EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Kinect.Toolkit", "Microsoft.Kinect.Toolkit\Microsoft.Kinect.Toolkit.csproj", "{C6F9C31B-6130-4443-A5CC-EF0664552ECD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication2", "web\WebApplication2\WebApplication2.csproj", "{D6B15DD6-5502-4BED-B122-B09E2B7E127A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,18 @@ Global
 		{C6F9C31B-6130-4443-A5CC-EF0664552ECD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C6F9C31B-6130-4443-A5CC-EF0664552ECD}.Release|Win32.ActiveCfg = Release|Any CPU
 		{C6F9C31B-6130-4443-A5CC-EF0664552ECD}.Release|x64.ActiveCfg = Release|Any CPU
+		{D6B15DD6-5502-4BED-B122-B09E2B7E127A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6B15DD6-5502-4BED-B122-B09E2B7E127A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6B15DD6-5502-4BED-B122-B09E2B7E127A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D6B15DD6-5502-4BED-B122-B09E2B7E127A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D6B15DD6-5502-4BED-B122-B09E2B7E127A}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{D6B15DD6-5502-4BED-B122-B09E2B7E127A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D6B15DD6-5502-4BED-B122-B09E2B7E127A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6B15DD6-5502-4BED-B122-B09E2B7E127A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6B15DD6-5502-4BED-B122-B09E2B7E127A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D6B15DD6-5502-4BED-B122-B09E2B7E127A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D6B15DD6-5502-4BED-B122-B09E2B7E127A}.Release|Win32.ActiveCfg = Release|Any CPU
+		{D6B15DD6-5502-4BED-B122-B09E2B7E127A}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
