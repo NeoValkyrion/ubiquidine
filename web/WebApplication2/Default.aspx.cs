@@ -1,19 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Configuration;
-using System.Data.SqlClient; // must add this...
-using System.Data; // must add this...
-
+using System.Web.Configuration;
 
 namespace WebApplication2
 {
-    public partial class _Default : Page
+    public partial class _Default : System.Web.UI.Page
     {
 
+        private SqlConnection _connection;
+        private SqlCommand _command;
+        private SqlDataReader _reader;
+
+        protected void Page_Load(object sender, EventArgs e) 
+        { 
+            if (!IsPostBack)
+                {
+                    // Hook PreRenderComplete event for data binding
+                    this.PreRenderComplete += new EventHandler(Page_PreRenderComplete);
+
+                    // Register async methods
+                    AddOnPreRenderCompleteAsync(
+                        new BeginEventHandler(BeginAsyncOperation),
+                        new EndEventHandler(EndAsyncOperation)
+                    );
+                }
+        }
+
+        IAsyncResult BeginAsyncOperation(object sender, EventArgs e, AsyncCallback cb, object state)
+        {
+            string connect = WebConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
+            _connection = new SqlConnection(connect);
+            _connection.Open();
+            _command = new SqlCommand("SELECT * from tables", _connection);
+            return _command.BeginExecuteReader(cb, state);
+        }
+        
+        void EndAsyncOperation(IAsyncResult ar)
+        {
+            _reader = _command.EndExecuteReader(ar);
+        }
+
+        protected void Page_PreRenderComplete(object sender, EventArgs e)
+        {
+            GridView2.DataSource = _reader;
+            GridView2.DataBind();
+        }
+    }
+
+    /*
         protected void Page_Load(object sender, EventArgs e)
         {
              //string connection = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
@@ -74,15 +114,5 @@ namespace WebApplication2
                 Console.Write(e.Message); 
             }
         }
-
-        public void refreshMe()
-        {
-            Page.Response.Redirect(Page.Request.Url.ToString(), true);
-        }
-
-        protected void thebutton_Click(object sender, EventArgs e)
-        {
-            refreshMe(); 
-        }
-    }
+     */
 }
