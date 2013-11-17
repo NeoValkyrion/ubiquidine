@@ -26,7 +26,26 @@ namespace WebApplication2
             adapter.Fill(data);
 
             return data; 
-        } 
+        }
+
+        public static void setTable(int tableID, int value, string target)
+        {
+            string connection = "Server=tcp:y71sqpp01v.database.windows.net,1433;Database=ubiquidine;User ID=superuser@y71sqpp01v;Password=password!1234;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;";
+
+            string query = "UPDATE TABLES SET "+target+"="+value+" WHERE tableID="+tableID;
+
+            SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+
+            DataSet data = new DataSet();
+
+            adapter.Fill(data);
+
+            //return data;
+        }
+
+  
+
+
 
         public static void emptyPlate(int tableID, int value)
         {
@@ -57,6 +76,7 @@ namespace WebApplication2
 
             adapter.Fill(data);
         }
+
 
 
 

@@ -9,9 +9,9 @@ using System.Data.SqlClient; // must add this...
 using System.Data; // must add this...
 using WebApplication2; 
 
-public class HelloWorldHandler : IHttpHandler
+public class ResetDrinkHandler : IHttpHandler
 {
-    public HelloWorldHandler()
+    public ResetDrinkHandler()
     {
     }
     public void ProcessRequest(HttpContext context)
@@ -21,12 +21,11 @@ public class HelloWorldHandler : IHttpHandler
         // This handler is called whenever a file ending 
         // in .sample is requested. A file with that extension
 
-        DataSet d = WebApplication2.Controller.checkTable(1);
+        WebApplication2.Controller.setTable(1, 0, "emptyRefill"); 
 
-        string res = d.Tables[0].Rows[0]["needsWaiter"].ToString();
+        //string res = d.Tables[0].Rows[0]["needsWaiter"].ToString();
 
-        // does not need to exist.
-        Response.Write(res);
+        Response.Write("Acknowledged empty drink at table 1.");
         
     }
     public bool IsReusable
