@@ -40,16 +40,19 @@ namespace FaceTrackingBasics
                 double uniquenessThreshold = 0.8;
                 if (false && GpuInvoke.HasCuda)
                 {
+                    
                     GpuSURFDetector surfGPU = new GpuSURFDetector(surfCPU.SURFParams, 0.01f);
+                    
                     using (GpuImage<Gray, Byte> gpuModelImage = new GpuImage<Gray, byte>(modelImage))
                     //extract features from the object image
                     using (GpuMat<float> gpuModelKeyPoints = surfGPU.DetectKeyPointsRaw(gpuModelImage, null))
                     using (GpuMat<float> gpuModelDescriptors = surfGPU.ComputeDescriptorsRaw(gpuModelImage, null, gpuModelKeyPoints))
                     using (GpuBruteForceMatcher<float> matcher = new GpuBruteForceMatcher<float>(DistanceType.L2))
                     {
+                        watch = Stopwatch.StartNew();
                         modelKeyPoints = new VectorOfKeyPoint();
                         surfGPU.DownloadKeypoints(gpuModelKeyPoints, modelKeyPoints);
-                        watch = Stopwatch.StartNew();
+                        
 
                         // extract features from the observed image
                         using (GpuImage<Gray, Byte> gpuObservedImage = new GpuImage<Gray, byte>(observedImage))
@@ -135,7 +138,7 @@ namespace FaceTrackingBasics
                 //Draw the matched keypoints
                 Image<Bgr, Byte> result = Features2DToolbox.DrawMatches(modelImage, modelKeyPoints, observedImage, observedKeyPoints,
                    indices, new Bgr(255, 255, 255), new Bgr(255, 255, 255), mask, Features2DToolbox.KeypointDrawType.DEFAULT);
-
+                
                 #region draw the projected region on the image
                 if (homography != null)
                 {  //draw a rectangle along the projected model
@@ -145,8 +148,8 @@ namespace FaceTrackingBasics
                new PointF(rect.Right, rect.Bottom),
                new PointF(rect.Right, rect.Top),
                new PointF(rect.Left, rect.Top)};
-                    
-                    using(MemStorage m1 = new MemStorage())
+
+                    using (MemStorage m1 = new MemStorage())
                     using (MemStorage m2 = new MemStorage())
                     {
 
@@ -162,7 +165,7 @@ namespace FaceTrackingBasics
                             scenePoly.Push(i);
                         }
                         double ratio = scenePoly.Area / objPoly.Area;
-                        if (!(scenePoly.Area / objPoly.Area >= .25 && scenePoly.Area / objPoly.Area <= 1.25))
+                        if (!(ratio >= .25 && ratio <= 1.25))
                         {
                             result = null;
                         }
@@ -171,6 +174,10 @@ namespace FaceTrackingBasics
                             result.DrawPolyline(Array.ConvertAll<PointF, Point>(pts, Point.Round), true, new Bgr(Color.Red), 5);
                         }
                     }
+                }
+                else
+                {
+                    result = null;
                 }
                 #endregion
 
