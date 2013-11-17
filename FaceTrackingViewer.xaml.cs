@@ -58,19 +58,11 @@ namespace FaceTrackingBasics
 
         private Skeleton[] skeletonData;
 
-        private Image<Gray, Byte> objectImage;
+       
 
         public FaceTrackingViewer()
         {
-            this.InitializeComponent();
-            try
-            {
-                objectImage = new Image<Gray, Byte>("photo.jpg");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            
         }
 
         ~FaceTrackingViewer()
@@ -150,86 +142,70 @@ namespace FaceTrackingBasics
                 {
                     return;
                 }
-
-                Bitmap bmap = ImageToBitmap(colorImageFrame);
-                Image<Bgr,byte> test = new Image<Bgr,byte>(bmap);
-                Image<Gray, byte> grayImage = test.Convert<Gray, byte>();
-                long output = 0;
-                try
-                {
-                    if (DrawMatches.Draw(objectImage, grayImage, out output) != null)
-                    {
-                        time = 2;
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-
+                
 
                 // Check for image format changes.  The FaceTracker doesn't
                 // deal with that so we need to rBeset.
-                if (this.depthImageFormat != depthImageFrame.Format)
-                {
-                    this.ResetFaceTracking();
-                    this.depthImage = null;
-                    this.depthImageFormat = depthImageFrame.Format;
-                }
+                //if (this.depthImageFormat != depthImageFrame.Format)
+                //{
+                //    this.ResetFaceTracking();
+                //    this.depthImage = null;
+                //    this.depthImageFormat = depthImageFrame.Format;
+                //}
 
-                if (this.colorImageFormat != colorImageFrame.Format)
-                {
-                    this.ResetFaceTracking();
-                    this.colorImage = null;
-                    this.colorImageFormat = colorImageFrame.Format;
-                }
+                //if (this.colorImageFormat != colorImageFrame.Format)
+                //{
+                //    this.ResetFaceTracking();
+                //    this.colorImage = null;
+                //    this.colorImageFormat = colorImageFrame.Format;
+                //}
 
-                // Create any buffers to store copies of the data we work with
-                if (this.depthImage == null)
-                {
-                    this.depthImage = new short[depthImageFrame.PixelDataLength];
-                }
+                //// Create any buffers to store copies of the data we work with
+                //if (this.depthImage == null)
+                //{
+                //    this.depthImage = new short[depthImageFrame.PixelDataLength];
+                //}
 
-                if (this.colorImage == null)
-                {
-                    this.colorImage = new byte[colorImageFrame.PixelDataLength];
-                }
+                //if (this.colorImage == null)
+                //{
+                //    this.colorImage = new byte[colorImageFrame.PixelDataLength];
+                //}
                 
-                // Get the skeleton information
-                if (this.skeletonData == null || this.skeletonData.Length != skeletonFrame.SkeletonArrayLength)
-                {
-                    this.skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
-                }
+                //// Get the skeleton information
+                //if (this.skeletonData == null || this.skeletonData.Length != skeletonFrame.SkeletonArrayLength)
+                //{
+                //    this.skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                //}
 
-                colorImageFrame.CopyPixelDataTo(this.colorImage);
-                depthImageFrame.CopyPixelDataTo(this.depthImage);
-                skeletonFrame.CopySkeletonDataTo(this.skeletonData);
+                //colorImageFrame.CopyPixelDataTo(this.colorImage);
+                //depthImageFrame.CopyPixelDataTo(this.depthImage);
+                //skeletonFrame.CopySkeletonDataTo(this.skeletonData);
 
-                // Update the list of trackers and the trackers with the current frame information
-                foreach (Skeleton skeleton in this.skeletonData)
-                {
-                    if (skeleton.TrackingState == SkeletonTrackingState.Tracked
-                        || skeleton.TrackingState == SkeletonTrackingState.PositionOnly)
-                    {
-                        // We want keep a record of any skeleton, tracked or untracked.
-                        if (!this.trackedSkeletons.ContainsKey(skeleton.TrackingId))
-                        {
-                            this.trackedSkeletons.Add(skeleton.TrackingId, new SkeletonFaceTracker());
-                        }
+                //// Update the list of trackers and the trackers with the current frame information
+                //foreach (Skeleton skeleton in this.skeletonData)
+                //{
+                //    if (skeleton.TrackingState == SkeletonTrackingState.Tracked
+                //        || skeleton.TrackingState == SkeletonTrackingState.PositionOnly)
+                //    {
+                //        // We want keep a record of any skeleton, tracked or untracked.
+                //        if (!this.trackedSkeletons.ContainsKey(skeleton.TrackingId))
+                //        {
+                //            this.trackedSkeletons.Add(skeleton.TrackingId, new SkeletonFaceTracker());
+                //        }
 
-                        // Give each tracker the upated frame.
-                        SkeletonFaceTracker skeletonFaceTracker;
-                        if (this.trackedSkeletons.TryGetValue(skeleton.TrackingId, out skeletonFaceTracker))
-                        {
-                            skeletonFaceTracker.OnFrameReady(this.Kinect, colorImageFormat, colorImage, depthImageFormat, depthImage, skeleton);
-                            skeletonFaceTracker.LastTrackedFrame = skeletonFrame.FrameNumber;
-                        }
-                    }
-                }
+                //        // Give each tracker the upated frame.
+                //        SkeletonFaceTracker skeletonFaceTracker;
+                //        if (this.trackedSkeletons.TryGetValue(skeleton.TrackingId, out skeletonFaceTracker))
+                //        {
+                //            skeletonFaceTracker.OnFrameReady(this.Kinect, colorImageFormat, colorImage, depthImageFormat, depthImage, skeleton);
+                //            skeletonFaceTracker.LastTrackedFrame = skeletonFrame.FrameNumber;
+                //        }
+                //    }
+                //}
 
-                this.RemoveOldTrackers(skeletonFrame.FrameNumber);
+                //this.RemoveOldTrackers(skeletonFrame.FrameNumber);
 
-                this.InvalidateVisual();
+                //this.InvalidateVisual();
             }
             finally
             {
@@ -240,7 +216,7 @@ namespace FaceTrackingBasics
 
                 if (depthImageFrame != null)
                 {
-                    depthImageFrame.Dispose();
+                   depthImageFrame.Dispose();
                 }
 
                 if (skeletonFrame != null)
@@ -260,7 +236,7 @@ namespace FaceTrackingBasics
 
             if (newSensor != null)
             {
-                newSensor.AllFramesReady += this.OnAllFramesReady;
+               newSensor.AllFramesReady += this.OnAllFramesReady;
             }
         }
 

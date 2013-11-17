@@ -55,17 +55,24 @@ namespace WebApplication2
         // pass a SQL query + a dataset to fill
         private void runSelectQuery(string query, DataSet myDS)
         {
-            //string connection = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            try
+            {
+                //string connection = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
 
-            string connection = "Server=tcp:y71sqpp01v.database.windows.net,1433;Database=ubiquidine;User ID=superuser@y71sqpp01v;Password=password!1234;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;";
+                string connection = "Server=tcp:y71sqpp01v.database.windows.net,1433;Database=ubiquidine;User ID=superuser@y71sqpp01v;Password=password!1234;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;";
 
-            SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
 
-            //DataSet myDS = new DataSet();
+                //DataSet myDS = new DataSet();
 
-            adapter.Fill(myDS);
+                adapter.Fill(myDS);
 
-            //return adapter; 
+                //return adapter; 
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.Message); 
+            }
         }
 
         public void refreshMe()
