@@ -19,28 +19,10 @@ namespace FaceTrackingBasics
     using Emgu.CV;
     using Emgu.CV.Structure;
     using WebApplication2;
-    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Media;
-    using Microsoft.Kinect;
     using Microsoft.Kinect.Toolkit.FaceTracking;
-    using System;
-    using System.Windows;
-    using System.Windows.Data;
-    using System.Windows.Media;
-    using System.Windows.Media.Imaging;
-    using Microsoft.Kinect;
-    using Microsoft.Kinect.Toolkit;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.Runtime.InteropServices;
-    using Emgu.CV;
-    using Emgu.CV.Structure;
-    using WebApplication2;
-
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -53,6 +35,8 @@ namespace FaceTrackingBasics
         private byte[] colorImageData;
         private ColorImageFormat currentColorImageFormat = ColorImageFormat.Undefined;
         private Image<Gray, Byte> objectImage;
+        private ObjectDetectee plate;
+        private ObjectDetectee waiter;
 
         public MainWindow()
         {
@@ -62,14 +46,9 @@ namespace FaceTrackingBasics
             faceTrackingViewer.SetBinding(FaceTrackingViewer.KinectProperty, faceTrackingViewerBinding);
 
             this.InitializeComponent();
-            try
-            {
-                objectImage = new Image<Gray, Byte>("photo.jpg");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+
+            plate = new ObjectDetectee("photo.jpg");
+            waiter = new ObjectDetectee("waiter.jpg");
 
             sensorChooser.KinectChanged += SensorChooserOnKinectChanged;
 
@@ -164,43 +143,17 @@ namespace FaceTrackingBasics
                     colorImageFrame.Width * Bgr32BytesPerPixel,
                     0);
 
-                Stopwatch total = new Stopwatch();
-                total.Start();
-                Stopwatch watch = new Stopwatch();
-                watch.Start();
                 Bitmap bmap = ImageToBitmap(colorImageFrame);
-                watch.Stop();
-                long spot1 = watch.ElapsedMilliseconds;
-                watch.Reset();
-                watch.Start();
-                Image<Bgr, byte> test = new Image<Bgr, byte>(bmap);
-                watch.Stop();
-                long spot2 = watch.ElapsedMilliseconds;
-                watch.Reset();
-                watch.Start();
-                Image<Gray, byte> grayImage = test.Convert<Gray, byte>();
-                watch.Stop();
-                long spot3 = watch.ElapsedMilliseconds;
-                long output = 0;
-                watch.Reset();
-                watch.Start();
-               
-                try
+                Image<Gray, byte> sceneImage = (new Image<Bgr, byte>(bmap)).Convert<Gray, byte>();
+                ObjectDetectee scene = new ObjectDetectee(sceneImage);
+                if (ObjectMatcher.Detect(scene, plate))
                 {
-                    if (DrawMatches.Draw(objectImage, grayImage, out output) != null)
-                    {
-                        time = 2;
-                        WebApplication2.Controller.emptyPlate(1, 1); 
-                    }
+                    WebApplication2.Controller.emptyPlate(1,1);
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
+                if(ObjectMatcher.Detect(scene, waiter)) {
+                    WebApplication2.Controller.waiterCalled(1,1);
                 }
-                watch.Stop();
-                long spot4 = watch.ElapsedMilliseconds;
-                total.Stop();
-                long fjkhdfjkfd = total.ElapsedMilliseconds;
+                //WebApplication2.Controller.emptyPlate(1, 0);
             }
         }
 
