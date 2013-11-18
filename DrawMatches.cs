@@ -14,6 +14,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV.GPU;
 
+
 namespace FaceTrackingBasics
 {
         public static class DrawMatches
@@ -165,7 +166,12 @@ namespace FaceTrackingBasics
                             scenePoly.Push(i);
                         }
                         double ratio = scenePoly.Area / objPoly.Area;
-                        if (!(ratio >= .25 && ratio <= 1.25))
+                        Matrix<double> row = homography.GetRow(2);
+                        //if (!(ratio >= .25 && ratio <= 1.25))
+                        //{
+                        //    result = null;
+                        //}
+                        if (Math.Abs(homography.Data[2, 0]) > .003 || Math.Abs(homography.Data[2, 1]) > .003)
                         {
                             result = null;
                         }
