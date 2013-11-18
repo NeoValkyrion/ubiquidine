@@ -12,6 +12,7 @@ namespace FaceTrackingBasics
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
+    using System.Threading;
     using Microsoft.Kinect.Toolkit;
     using System.Drawing;
     using System.Drawing.Imaging;
@@ -34,20 +35,55 @@ namespace FaceTrackingBasics
         private WriteableBitmap colorImageWritableBitmap;
         private byte[] colorImageData;
         private ColorImageFormat currentColorImageFormat = ColorImageFormat.Undefined;
-        private Image<Gray, Byte> objectImage;
-        private ObjectDetectee plate;
-        private ObjectDetectee waiter;
+        private static Image<Gray, Byte> objectImage;
+        private static ObjectDetectee plate;
+        private static ObjectDetectee waiter;
+        private volatile static bool thread_working = false;
+        private volatile static Image<Gray, Byte> sceneImage;
+        private static System.Threading.AutoResetEvent autoEvent = new AutoResetEvent(false);
+        private static Mutex mut = new Mutex();
+        private Thread workerThread = new Thread(MatcherThread);
+
+
+        private static void MatcherThread()
+        {
+            while (true)
+            {
+                autoEvent.WaitOne();
+                mut.WaitOne();
+                thread_working = true;
+                mut.ReleaseMutex();
+                long test;
+
+                ObjectDetectee scene = new ObjectDetectee(sceneImage);
+                
+                    if (ObjectMatcher.Detect(scene, plate))
+                    {
+                        WebApplication2.Controller.emptyPlate(1, 1);
+                    }
+                    if (ObjectMatcher.Detect(scene, waiter))
+                    {
+                        WebApplication2.Controller.waiterCalled(1, 1);
+                    }
+                
+                mut.WaitOne();
+                thread_working = false;
+                mut.ReleaseMutex();
+            }
+        }
+
 
         public MainWindow()
         {
             InitializeComponent();
-
+            workerThread.Start();
             var faceTrackingViewerBinding = new Binding("Kinect") { Source = sensorChooser };
             faceTrackingViewer.SetBinding(FaceTrackingViewer.KinectProperty, faceTrackingViewerBinding);
 
             this.InitializeComponent();
 
             plate = new ObjectDetectee("photo.jpg");
+            objectImage = new Image<Gray, byte>("photo.jpg");
             waiter = new ObjectDetectee("waiter.jpg");
 
             sensorChooser.KinectChanged += SensorChooserOnKinectChanged;
@@ -144,15 +180,14 @@ namespace FaceTrackingBasics
                     0);
 
                 Bitmap bmap = ImageToBitmap(colorImageFrame);
-                Image<Gray, byte> sceneImage = (new Image<Bgr, byte>(bmap)).Convert<Gray, byte>();
-                ObjectDetectee scene = new ObjectDetectee(sceneImage);
-                if (ObjectMatcher.Detect(scene, plate))
+                mut.WaitOne();
+                if (!thread_working)
                 {
-                    WebApplication2.Controller.emptyPlate(1,1);
+                    sceneImage = (new Image<Bgr, byte>(bmap)).Convert<Gray, byte>();
+                    autoEvent.Set();
                 }
-                if(ObjectMatcher.Detect(scene, waiter)) {
-                    WebApplication2.Controller.waiterCalled(1,1);
-                }
+                mut.ReleaseMutex();
+                
                 //WebApplication2.Controller.emptyPlate(1, 0);
             }
         }

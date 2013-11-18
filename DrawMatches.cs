@@ -167,18 +167,18 @@ namespace FaceTrackingBasics
                         }
                         double ratio = scenePoly.Area / objPoly.Area;
                         Matrix<double> row = homography.GetRow(2);
-                        //if (!(ratio >= .25 && ratio <= 1.25))
-                        //{
-                        //    result = null;
-                        //}
-                        if (Math.Abs(homography.Data[2, 0]) > .003 || Math.Abs(homography.Data[2, 1]) > .003)
+                        if (!(ratio >= .005 && ratio <= 1.25))
                         {
                             result = null;
                         }
+                        //if (Math.Abs(homography.Data[2, 0]) > .003 || Math.Abs(homography.Data[2, 1]) > .003)
+                        //{
+                        //    result = null;
+                        //}
                         else
                         {
                             result.DrawPolyline(Array.ConvertAll<PointF, Point>(pts, Point.Round), true, new Bgr(Color.Red), 5);
-                        }
+                       }
                     }
                 }
                 else

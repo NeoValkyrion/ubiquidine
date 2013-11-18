@@ -81,11 +81,11 @@ namespace FaceTrackingBasics
                     }
                     double ratio = scenePoly.Area / objPoly.Area;
                     Matrix<double> row = homography.GetRow(2);
-                    if (!(ratio >= .25 && ratio <= 1.25))
+                    if (!(ratio >= .001 && ratio <= 5.25))
                     {
                         return false;
                     }
-                    if (Math.Abs(homography.Data[2, 0]) > .003 || Math.Abs(homography.Data[2, 1]) > .003)
+                    if (Math.Abs(homography.Data[2, 0]) > .005 && Math.Abs(homography.Data[2, 1]) > .005)
                     {
                         return false;
                     }
