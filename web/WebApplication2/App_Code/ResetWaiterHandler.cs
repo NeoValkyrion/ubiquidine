@@ -9,9 +9,9 @@ using System.Data.SqlClient; // must add this...
 using System.Data; // must add this...
 using WebApplication2; 
 
-public class WaiterHandler : IHttpHandler
+public class ResetWaiterHandler : IHttpHandler
 {
-    public WaiterHandler()
+    public ResetWaiterHandler()
     {
     }
     public void ProcessRequest(HttpContext context)
