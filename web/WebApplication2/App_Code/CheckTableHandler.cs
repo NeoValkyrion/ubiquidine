@@ -9,9 +9,9 @@ using System.Data.SqlClient; // must add this...
 using System.Data; // must add this...
 using WebApplication2; 
 
-public class ResetWaiterHandler : IHttpHandler
+public class CheckTableHandler : IHttpHandler
 {
-    public ResetWaiterHandler()
+    public CheckTableHandler()
     {
     }
     public void ProcessRequest(HttpContext context)
@@ -21,11 +21,13 @@ public class ResetWaiterHandler : IHttpHandler
         // This handler is called whenever a file ending 
         // in .sample is requested. A file with that extension
 
-        WebApplication2.Controller.setTable(1, 0, "needsWaiter"); 
+        DataSet d = WebApplication2.Controller.checkTable(1);
 
-        //string res = d.Tables[0].Rows[0]["needsWaiter"].ToString();
+        string drink = d.Tables[0].Rows[0]["needsRefill"].ToString();
+        string waiter = d.Tables[0].Rows[0]["needsWaiter"].ToString();
+        string plate = d.Tables[0].Rows[0]["emptyPlate"].ToString();
 
-        Response.Write("Acknowledged waiter call at table 1.");
+        Response.Write("needs refill: " + drink + " needs waiter: " + waiter + " needs plate: " + plate); 
         
     }
     public bool IsReusable

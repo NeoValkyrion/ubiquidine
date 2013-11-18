@@ -239,7 +239,9 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="ViewSwitcher.ascx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Bundle.config" />
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
@@ -248,8 +250,9 @@
     <Content Include="App_Code\CheckPlateHandler.cs" />
     <Content Include="App_Code\CheckDrinkHandler.cs" />
     <Content Include="App_Code\ResetPlateHandler.cs" />
-    <Content Include="App_Code\ResetWaiterHandler.cs" />
+    <Content Include="App_Code\CheckTableHandler.cs" />
     <Content Include="App_Code\ResetDrinkHandler.cs" />
+    <Content Include="App_Code\ResetWaiterHandler.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="About.aspx.cs">
