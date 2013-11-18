@@ -18,7 +18,28 @@ namespace FaceTrackingBasics
     using System.Runtime.InteropServices;
     using Emgu.CV;
     using Emgu.CV.Structure;
-    using WebApplication2; 
+    using WebApplication2;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using Microsoft.Kinect;
+    using Microsoft.Kinect.Toolkit.FaceTracking;
+    using System;
+    using System.Windows;
+    using System.Windows.Data;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using Microsoft.Kinect;
+    using Microsoft.Kinect.Toolkit;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.Runtime.InteropServices;
+    using Emgu.CV;
+    using Emgu.CV.Structure;
+    using WebApplication2;
 
 
     /// <summary>
@@ -31,6 +52,7 @@ namespace FaceTrackingBasics
         private WriteableBitmap colorImageWritableBitmap;
         private byte[] colorImageData;
         private ColorImageFormat currentColorImageFormat = ColorImageFormat.Undefined;
+        private Image<Gray, Byte> objectImage;
 
         public MainWindow()
         {
@@ -38,6 +60,16 @@ namespace FaceTrackingBasics
 
             var faceTrackingViewerBinding = new Binding("Kinect") { Source = sensorChooser };
             faceTrackingViewer.SetBinding(FaceTrackingViewer.KinectProperty, faceTrackingViewerBinding);
+
+            this.InitializeComponent();
+            try
+            {
+                objectImage = new Image<Gray, Byte>("photo.jpg");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
             sensorChooser.KinectChanged += SensorChooserOnKinectChanged;
 
@@ -103,6 +135,8 @@ namespace FaceTrackingBasics
             faceTrackingViewer.Dispose();
         }
 
+        public volatile int time = 0;
+
         private void KinectSensorOnAllFramesReady(object sender, AllFramesReadyEventArgs allFramesReadyEventArgs)
         {
             using (var colorImageFrame = allFramesReadyEventArgs.OpenColorImageFrame())
@@ -122,7 +156,6 @@ namespace FaceTrackingBasics
                         colorImageFrame.Width, colorImageFrame.Height, 96, 96, PixelFormats.Bgr32, null);
                     ColorImage.Source = this.colorImageWritableBitmap;
                 }
-                Bitmap bmap = ImageToBitmap(colorImageFrame);
                 //Image<Bgr,Byte>  new Image<TColor, TDepth>(bitmap);
                 colorImageFrame.CopyPixelDataTo(this.colorImageData);
                 this.colorImageWritableBitmap.WritePixels(
@@ -130,6 +163,44 @@ namespace FaceTrackingBasics
                     this.colorImageData,
                     colorImageFrame.Width * Bgr32BytesPerPixel,
                     0);
+
+                Stopwatch total = new Stopwatch();
+                total.Start();
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                Bitmap bmap = ImageToBitmap(colorImageFrame);
+                watch.Stop();
+                long spot1 = watch.ElapsedMilliseconds;
+                watch.Reset();
+                watch.Start();
+                Image<Bgr, byte> test = new Image<Bgr, byte>(bmap);
+                watch.Stop();
+                long spot2 = watch.ElapsedMilliseconds;
+                watch.Reset();
+                watch.Start();
+                Image<Gray, byte> grayImage = test.Convert<Gray, byte>();
+                watch.Stop();
+                long spot3 = watch.ElapsedMilliseconds;
+                long output = 0;
+                watch.Reset();
+                watch.Start();
+               
+                try
+                {
+                    if (DrawMatches.Draw(objectImage, grayImage, out output) != null)
+                    {
+                        time = 2;
+                        WebApplication2.Controller.emptyPlate(1, 1); 
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                watch.Stop();
+                long spot4 = watch.ElapsedMilliseconds;
+                total.Stop();
+                long fjkhdfjkfd = total.ElapsedMilliseconds;
             }
         }
 

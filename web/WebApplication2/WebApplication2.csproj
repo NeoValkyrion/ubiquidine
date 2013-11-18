@@ -205,6 +205,8 @@
     <Content Include="Images\plate.jpg" />
     <Content Include="packages.config" />
     <Content Include="App.config" />
+    <None Include="Properties\PublishProfiles\ubiquidine - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\ubiquidine - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
@@ -242,6 +244,12 @@
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Code\CheckWaiterHandler.cs" />
+    <Content Include="App_Code\CheckPlateHandler.cs" />
+    <Content Include="App_Code\CheckDrinkHandler.cs" />
+    <Content Include="App_Code\ResetPlateHandler.cs" />
+    <Content Include="App_Code\ResetWaiterHandler.cs" />
+    <Content Include="App_Code\ResetDrinkHandler.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="About.aspx.cs">
