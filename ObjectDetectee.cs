@@ -35,6 +35,30 @@ namespace FaceTrackingBasics
             set { _objectDescriptors = value; }
         }
 
+        private long timeLastSeen = 0;
+        private int numTimesSeen = 0;
+        private long timeLastSeenThreshold = 2000;
+        private int timesSeenThreshold = 3;
+
+        public bool reportSeen(long time)
+        {
+            if (time - this.timeLastSeen <= timeLastSeenThreshold)
+            {
+                numTimesSeen++;
+            }
+            else
+            {
+                numTimesSeen = 1;
+            }
+            this.timeLastSeen = time;
+            if (numTimesSeen > timesSeenThreshold)
+            {
+                numTimesSeen = 0;
+                return true;
+            }
+            return false;
+        }
+
         private void extractData() {
              SURFDetector surfCPU = new SURFDetector(500, false);
 
@@ -44,6 +68,14 @@ namespace FaceTrackingBasics
 
         public ObjectDetectee(Image<Gray,Byte> image) {
             _objectImage = image;
+            extractData();
+        }
+
+        public ObjectDetectee(string filename, long timeThreshold, int countThreshold)
+        {
+            this.timeLastSeenThreshold = timeThreshold;
+            this.timesSeenThreshold = countThreshold;
+           _objectImage = new Image<Gray, Byte>(filename);
             extractData();
         }
 

@@ -19,13 +19,14 @@ namespace FaceTrackingBasics
         {
             HomographyMatrix homography = null;
 
-            
+
             VectorOfKeyPoint observedKeyPoints;
             Matrix<int> indices;
 
             Matrix<byte> mask;
             int k = 2;
             double uniquenessThreshold = 0.8;
+            int testsPassed = 0;
 
             // extract features from the observed image
             observedKeyPoints = observedScene.objectKeyPoints;
@@ -45,16 +46,35 @@ namespace FaceTrackingBasics
                 Features2DToolbox.VoteForUniqueness(dist, uniquenessThreshold, mask);
             }
 
+            int nonZero = 0;
             int nonZeroCount = CvInvoke.cvCountNonZero(mask);
-            if (nonZeroCount >= 4)
+            if (nonZeroCount >= 15)
             {
                 nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(obj.objectKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
                 if (nonZeroCount >= 4)
+                {
                     homography = Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(obj.objectKeyPoints, observedKeyPoints, indices, mask, 2);
+                    for (int i = 0; i < mask.Height; i++)
+                    {
+                        for (int j = 0; j < mask.Width; j++)
+                        {
+                            if (mask[i, j] != 0)
+                            {
+                                nonZero++;
+                            }
+                        }
+                    }
+                    if (nonZero > 4)
+                    {
+                        testsPassed++;
+                    }
+                }
+
             }
 
             if (homography != null)
-            {  //draw a rectangle along the projected model
+            {
+                //draw a rectangle along the projected model
                 Rectangle rect = obj.objectImage.ROI;
                 PointF[] pts = new PointF[] { 
                new PointF(rect.Left, rect.Bottom),
@@ -79,19 +99,35 @@ namespace FaceTrackingBasics
                     {
                         scenePoly.Push(i);
                     }
+                    double shapeMatch = CvInvoke.cvMatchShapes(objPoly, scenePoly, Emgu.CV.CvEnum.CONTOURS_MATCH_TYPE.CV_CONTOURS_MATCH_I3, 0);
                     double ratio = scenePoly.Area / objPoly.Area;
-                    Matrix<double> row = homography.GetRow(2);
-                    if (!(ratio >= .001 && ratio <= 5.25))
+                    foreach (PointF i in pts)
                     {
-                        return false;
+                        if (i.X < 0 || i.Y < 0)
+                        {
+                            return false;
+                        }
                     }
-                    if (Math.Abs(homography.Data[2, 0]) > .005 && Math.Abs(homography.Data[2, 1]) > .005)
+                    if (shapeMatch != 0 && shapeMatch <= 2)
                     {
-                        return false;
+                        testsPassed++;
+                    }
+                    if (ratio > 0.001 && ratio < 5.25)
+                    {
+                        testsPassed++;
+                    }
+                    if (!(Math.Abs(homography.Data[2, 0]) > .005 && Math.Abs(homography.Data[2, 1]) > .005))
+                    {
+                        testsPassed++;
+                    }
+
+                    if (testsPassed >= 2)
+                    {
+                        return true;
                     }
                     else
                     {
-                        return true;
+                        return false;
                     }
                 }
             }

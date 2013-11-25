@@ -84,7 +84,7 @@ namespace WebApplication2
         {
             //string connection = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
 
-            string connection = "Data Source=JON-DESKTOP;Initial Catalog=ubiquidine;Integrated Security=True";
+            string connection = "Server=tcp:y71sqpp01v.database.windows.net,1433;Database=ubiquidine;User ID=superuser@y71sqpp01v;Password=password!1234;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;";
 
             string query = "UPDATE tables SET needswaiter=" + value + " WHERE tableID=" + tableID;
 

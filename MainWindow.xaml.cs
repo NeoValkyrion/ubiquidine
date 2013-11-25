@@ -47,6 +47,8 @@ namespace FaceTrackingBasics
 
         private static void MatcherThread()
         {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
             while (true)
             {
                 autoEvent.WaitOne();
@@ -55,16 +57,26 @@ namespace FaceTrackingBasics
                 mut.ReleaseMutex();
                 long test;
 
+                watch.Start();
                 ObjectDetectee scene = new ObjectDetectee(sceneImage);
-                
-                    if (ObjectMatcher.Detect(scene, plate))
-                    {
+
+                if (ObjectMatcher.Detect(scene, plate))
+                {
+                    if(plate.reportSeen(watch.ElapsedMilliseconds)) {
+                        watch.Stop();
                         WebApplication2.Controller.emptyPlate(1, 1);
-                    }
-                    if (ObjectMatcher.Detect(scene, waiter))
+                        watch.Start();
+                    }                    
+                }
+                if (ObjectMatcher.Detect(scene, waiter))
+                {
+                    if (waiter.reportSeen(watch.ElapsedMilliseconds))
                     {
+                        watch.Stop();
                         WebApplication2.Controller.waiterCalled(1, 1);
+                        watch.Start();
                     }
+                }
                 
                 mut.WaitOne();
                 thread_working = false;
@@ -82,9 +94,9 @@ namespace FaceTrackingBasics
 
             this.InitializeComponent();
 
-            plate = new ObjectDetectee("photo.jpg");
-            objectImage = new Image<Gray, byte>("photo.jpg");
-            waiter = new ObjectDetectee("waiter.jpg");
+            plate = new ObjectDetectee("aug2.jpg");
+            //objectImage = new Image<Gray, byte>("aug.jpg");
+            waiter = new ObjectDetectee("photo.jpg", 5000, 3);
 
             sensorChooser.KinectChanged += SensorChooserOnKinectChanged;
 
@@ -187,7 +199,7 @@ namespace FaceTrackingBasics
                     autoEvent.Set();
                 }
                 mut.ReleaseMutex();
-                
+
                 //WebApplication2.Controller.emptyPlate(1, 0);
             }
         }
