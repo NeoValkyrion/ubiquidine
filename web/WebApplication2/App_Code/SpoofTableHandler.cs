@@ -9,9 +9,9 @@ using System.Data.SqlClient; // must add this...
 using System.Data; // must add this...
 using WebApplication2; 
 
-public class CheckTableHandler : IHttpHandler
+public class SpoofTableHandler : IHttpHandler
 {
-    public CheckTableHandler()
+    public SpoofTableHandler()
     {
     }
     public void ProcessRequest(HttpContext context)
@@ -21,13 +21,13 @@ public class CheckTableHandler : IHttpHandler
         // This handler is called whenever a file ending 
         // in .sample is requested. A file with that extension
 
-        DataSet d = WebApplication2.Controller.checkTable(1);
+        WebApplication2.Controller.setTable(1, 1, "needsRefill");
+        WebApplication2.Controller.setTable(1, 1, "emptyPlate");
+        WebApplication2.Controller.setTable(1, 1, "needsWaiter"); 
 
-        string drink = d.Tables[0].Rows[0]["needsRefill"].ToString();
-        string waiter = d.Tables[0].Rows[0]["needsWaiter"].ToString();
-        string plate = d.Tables[0].Rows[0]["emptyPlate"].ToString();
+        //string res = d.Tables[0].Rows[0]["needsWaiter"].ToString();
 
-        Response.Write("" + drink + waiter + plate); 
+        Response.Write("Reset all values for table 1.");
         
     }
     public bool IsReusable

@@ -253,6 +253,11 @@
     <Content Include="App_Code\CheckTableHandler.cs" />
     <Content Include="App_Code\ResetDrinkHandler.cs" />
     <Content Include="App_Code\ResetWaiterHandler.cs" />
+    <Content Include="App_Code\ResetTableHandler.cs" />
+    <Content Include="App_Code\SpoofTableHandler.cs" />
+    <Content Include="App_Code\SpoofWaiterHandler.cs" />
+    <Content Include="App_Code\SpoofPlateHandler.cs" />
+    <Content Include="App_Code\SpoofDrinkHandler.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="About.aspx.cs">
