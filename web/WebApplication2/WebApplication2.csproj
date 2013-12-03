@@ -189,6 +189,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Images\accent.png" />
     <Content Include="Images\bullet.png" />
+    <Content Include="Images\Cup.PNG" />
     <Content Include="Images\heroAccent.png" />
     <Content Include="Images\empty_cup.jpg" />
     <Content Include="Images\exclamation.jpg" />
@@ -203,6 +204,8 @@
     <Content Include="Images\orderedList8.png" />
     <Content Include="Images\orderedList9.png" />
     <Content Include="Images\plate.jpg" />
+    <Content Include="Images\Plate.PNG" />
+    <Content Include="Images\Waiter.PNG" />
     <Content Include="packages.config" />
     <Content Include="App.config" />
     <None Include="Properties\PublishProfiles\ubiquidine - FTP.pubxml" />

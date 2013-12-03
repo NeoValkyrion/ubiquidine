@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using System.Configuration;
 using System.Data.SqlClient; // must add this...
 using System.Data; // must add this...
+using System.Threading;
+using System.Web.Services;
 
 
 namespace WebApplication2
@@ -14,8 +16,59 @@ namespace WebApplication2
     public partial class _Default : Page
     {
 
+        [WebMethod]
+        public static String GetStatus()
+        {
+            DataSet myDS = new DataSet();
+
+            String r;
+
+            r = ""; 
+
+            runSelectQuery("SELECT * FROM tables", myDS);
+
+            //TextBox1.Text = myDS.Tables[0].Rows[0]["tableID"].ToString();
+            //TextBox2.Text = myDS.Tables[0].Rows[0]["calledWaiter"].ToString();
+            //TextBox3.Text = myDS.Tables[0].Rows[0]["emptyPlate"].ToString();
+            //TextBox4.Text = myDS.Tables[0].Rows[0]["emptyDrink"].ToString();
+
+            if (myDS.Tables[0].Rows[0]["needsWaiter"].ToString().Equals("1"))
+            {
+                r += "1";
+            }
+            else
+            {
+                r += "0";
+            }
+
+            if (myDS.Tables[0].Rows[0]["emptyPlate"].ToString().Equals("1"))
+            {
+                r += "1";
+            }
+            else
+            {
+                r += "0";
+            }
+
+            if (myDS.Tables[0].Rows[0]["needsRefill"].ToString().Equals("1"))
+            {
+                r += "1";
+            }
+            else
+            {
+                r += "0";
+            }
+
+            return r;
+
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            // call spoof
+           
+
              //string connection = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
 
              //SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM tables", connection);
@@ -27,33 +80,30 @@ namespace WebApplication2
 
             runSelectQuery("SELECT * FROM tables", myDS); 
 
-             TextBox1.Text = myDS.Tables[0].Rows[0]["tableID"].ToString();
+             //TextBox1.Text = myDS.Tables[0].Rows[0]["tableID"].ToString();
              //TextBox2.Text = myDS.Tables[0].Rows[0]["calledWaiter"].ToString();
              //TextBox3.Text = myDS.Tables[0].Rows[0]["emptyPlate"].ToString();
              //TextBox4.Text = myDS.Tables[0].Rows[0]["emptyDrink"].ToString();
 
              if (myDS.Tables[0].Rows[0]["needsWaiter"].ToString().Equals("1"))
              {
-                 theexclam.Visible = true;
+                 theexclam.Attributes["visibility"] = "visible";
              }
 
              if (myDS.Tables[0].Rows[0]["emptyPlate"].ToString().Equals("1"))
              {
-                 theplate.Visible = true;
+                 theplate.Attributes["visibility"] = "visible";
              }
 
              if (myDS.Tables[0].Rows[0]["needsRefill"].ToString().Equals("1"))
              {
-                 thecup.Visible = true;
+                 thecup.Attributes["visibility"] = "visible";
              }
 
         }
 
-        
-
-
         // pass a SQL query + a dataset to fill
-        private void runSelectQuery(string query, DataSet myDS)
+        private static void runSelectQuery(string query, DataSet myDS)
         {
             try
             {
@@ -77,12 +127,26 @@ namespace WebApplication2
 
         public void refreshMe()
         {
-            Page.Response.Redirect(Page.Request.Url.ToString(), true);
+                Page.Response.Redirect(Page.Request.Url.ToString(), true);
         }
 
         protected void thebutton_Click(object sender, EventArgs e)
         {
             refreshMe(); 
         }
+
+        protected void clearTable(object sender, EventArgs e)
+        {
+            Controller.emptyPlate(1, 0);
+            Controller.emptyDrink(1, 0);
+            Controller.waiterCalled(1, 0);
+            refreshMe(); 
+        }
+
+        protected void spoof(object sender, EventArgs e)
+        {
+            theexclam.Visible = true;
+        }
+               
     }
 }

@@ -13,15 +13,6 @@ namespace WebApplication2 {
     public partial class _Default {
         
         /// <summary>
-        /// TextBox1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox1;
-        
-        /// <summary>
         /// thecup control.
         /// </summary>
         /// <remarks>
@@ -49,12 +40,21 @@ namespace WebApplication2 {
         protected global::System.Web.UI.HtmlControls.HtmlImage theexclam;
         
         /// <summary>
-        /// thebutton control.
+        /// resetButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button thebutton;
+        protected global::System.Web.UI.WebControls.Button resetButton;
+        
+        /// <summary>
+        /// shower control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button shower;
     }
 }
