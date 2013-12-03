@@ -89,7 +89,6 @@
                  <img id="theplate" src="Images/Plate.png" height="50" runat="server" style="visibility:hidden" />
                  <img id="theexclam" src="Images/Waiter.png" height="50" runat="server" style="visibility:hidden" />
                  <asp:Button ID="resetButton" Text="Clear" OnClick="clearTable" runat="server" />
-                    <asp:Button ID="shower" Text="show" OnClick="spoof" runat="server" />
                 </td>
             </tr>
         </tbody>
