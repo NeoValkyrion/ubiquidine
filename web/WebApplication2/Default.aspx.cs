@@ -23,7 +23,7 @@ namespace WebApplication2
 
             String r;
 
-            r = ""; 
+            r = "";
 
             runSelectQuery("SELECT * FROM tables", myDS);
 
@@ -67,38 +67,38 @@ namespace WebApplication2
         {
 
             // call spoof
-           
 
-             //string connection = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
 
-             //SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM tables", connection);
+            //string connection = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
 
-             ///DataSet myDS = new DataSet();
-             //adapter.Fill(myDS);
+            //SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM tables", connection);
+
+            ///DataSet myDS = new DataSet();
+            //adapter.Fill(myDS);
 
             DataSet myDS = new DataSet();
 
-            runSelectQuery("SELECT * FROM tables", myDS); 
+            runSelectQuery("SELECT * FROM tables", myDS);
 
-             //TextBox1.Text = myDS.Tables[0].Rows[0]["tableID"].ToString();
-             //TextBox2.Text = myDS.Tables[0].Rows[0]["calledWaiter"].ToString();
-             //TextBox3.Text = myDS.Tables[0].Rows[0]["emptyPlate"].ToString();
-             //TextBox4.Text = myDS.Tables[0].Rows[0]["emptyDrink"].ToString();
+            //TextBox1.Text = myDS.Tables[0].Rows[0]["tableID"].ToString();
+            //TextBox2.Text = myDS.Tables[0].Rows[0]["calledWaiter"].ToString();
+            //TextBox3.Text = myDS.Tables[0].Rows[0]["emptyPlate"].ToString();
+            //TextBox4.Text = myDS.Tables[0].Rows[0]["emptyDrink"].ToString();
 
-             if (myDS.Tables[0].Rows[0]["needsWaiter"].ToString().Equals("1"))
-             {
-                 theexclam.Attributes["visibility"] = "visible";
-             }
+            if (myDS.Tables[0].Rows[0]["needsWaiter"].ToString().Equals("1"))
+            {
+                theexclam.Attributes["visibility"] = "visible";
+            }
 
-             if (myDS.Tables[0].Rows[0]["emptyPlate"].ToString().Equals("1"))
-             {
-                 theplate.Attributes["visibility"] = "visible";
-             }
+            if (myDS.Tables[0].Rows[0]["emptyPlate"].ToString().Equals("1"))
+            {
+                theplate.Attributes["visibility"] = "visible";
+            }
 
-             if (myDS.Tables[0].Rows[0]["needsRefill"].ToString().Equals("1"))
-             {
-                 thecup.Attributes["visibility"] = "visible";
-             }
+            if (myDS.Tables[0].Rows[0]["needsRefill"].ToString().Equals("1"))
+            {
+                thecup.Attributes["visibility"] = "visible";
+            }
 
         }
 
@@ -121,18 +121,18 @@ namespace WebApplication2
             }
             catch (Exception e)
             {
-                Console.Write(e.Message); 
+                Console.Write(e.Message);
             }
         }
 
         public void refreshMe()
         {
-                Page.Response.Redirect(Page.Request.Url.ToString(), true);
+            Page.Response.Redirect(Page.Request.Url.ToString(), true);
         }
 
         protected void thebutton_Click(object sender, EventArgs e)
         {
-            refreshMe(); 
+            refreshMe();
         }
 
         protected void clearTable(object sender, EventArgs e)
@@ -140,13 +140,16 @@ namespace WebApplication2
             Controller.emptyPlate(1, 0);
             Controller.emptyDrink(1, 0);
             Controller.waiterCalled(1, 0);
-            refreshMe(); 
+
+            //theexclam.Attributes["visibility"] = "hidden";
+            //theplate.Attributes["visibility"] = "hidden";
+            //thecup.Attributes["visibility"] = "hidden";
         }
 
         protected void spoof(object sender, EventArgs e)
         {
             theexclam.Visible = true;
         }
-               
+
     }
 }

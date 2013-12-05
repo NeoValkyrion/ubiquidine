@@ -48,7 +48,7 @@ namespace FaceTrackingBasics
 
             int nonZero = 0;
             int nonZeroCount = CvInvoke.cvCountNonZero(mask);
-            if (nonZeroCount >= 15)
+            if (nonZeroCount >= 4)
             {
                 nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(obj.objectKeyPoints, observedKeyPoints, indices, mask, 1.5, 20);
                 if (nonZeroCount >= 4)

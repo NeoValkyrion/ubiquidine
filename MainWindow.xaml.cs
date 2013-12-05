@@ -37,7 +37,7 @@ namespace FaceTrackingBasics
         private ColorImageFormat currentColorImageFormat = ColorImageFormat.Undefined;
         private static Image<Gray, Byte> objectImage;
         private static ObjectDetectee plate;
-        private static ObjectDetectee waiter;
+        private static ObjectDetectee waiter, glass;
         private volatile static bool thread_working = false;
         private volatile static Image<Gray, Byte> sceneImage;
         private static System.Threading.AutoResetEvent autoEvent = new AutoResetEvent(false);
@@ -62,11 +62,21 @@ namespace FaceTrackingBasics
 
                 if (ObjectMatcher.Detect(scene, plate))
                 {
-                    if(plate.reportSeen(watch.ElapsedMilliseconds)) {
+                    if (plate.reportSeen(watch.ElapsedMilliseconds))
+                    {
                         watch.Stop();
                         WebApplication2.Controller.emptyPlate(1, 1);
                         watch.Start();
-                    }                    
+                    }
+                }
+                if (ObjectMatcher.Detect(scene, glass))
+                {
+                    if (waiter.reportSeen(watch.ElapsedMilliseconds))
+                    {
+                        watch.Stop();
+                        WebApplication2.Controller.emptyDrink(1, 1);
+                        watch.Start();
+                    }
                 }
                 if (ObjectMatcher.Detect(scene, waiter))
                 {
@@ -96,7 +106,8 @@ namespace FaceTrackingBasics
 
             plate = new ObjectDetectee("aug2.jpg");
             //objectImage = new Image<Gray, byte>("aug.jpg");
-            waiter = new ObjectDetectee("photo.jpg", 5000, 3);
+            waiter = new ObjectDetectee("aug.jpg", 5000, 3);
+            glass = new ObjectDetectee("glass3.jpg");
 
             sensorChooser.KinectChanged += SensorChooserOnKinectChanged;
 
